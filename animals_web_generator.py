@@ -1,80 +1,105 @@
 import json
-# Load data
+
+
 def load_data(file_path):
-    """ Loads a JSON file """
-    with open(file_path, "r") as handle:
+    """ Loads a JSON file with explicit UTF-8 encoding """
+    # Added encoding="utf-8" here
+    with open(file_path, "r", encoding="utf-8") as handle:
         return json.load(handle)
-# Main
+
+
 def main():
-    # Load the animal data
+    # 1. Load data correctly
     animals_data = load_data('animals_data.json')
 
-    # Iterate through the list of animals
+    # 2. Serialize data (Logic remains the same)
+    output = ''
     for animal in animals_data:
-        # 1. Extract Name (Top level)
         name = animal.get("name")
+        characteristics = animal.get("characteristics", {})
+        diet = characteristics.get("diet")
+        animal_type = characteristics.get("type")
+        locations = animal.get("locations", [])
 
-        # # 2. Extract Diet and Type (Nested inside 'characteristics')
-        # characteristics = animal.get("characteristics", {})
-        # diet = characteristics.get("diet")
-        # animal_type = characteristics.get("type")
-        #
-        # # 3. Extract first Location (First item in 'locations' list)
-        # locations = animal.get("locations", [])
-        # if locations:
-        #     first_location = locations[0]
-        # else:
-        #     first_location = None
-        #
-        # # Printing logic: Only print if the field exists. Animal Type field sometimes doesn't exist
-        # if name:
-        #     print(f"Name: {name}")
-        # if diet:
-        #     print(f"Diet: {diet}")
-        # if first_location:
-        #     print(f"Location: {first_location}")
-        # if animal_type:
-        #     print(f"Type: {animal_type}")
-        #
-        # # Add a newline for better readability between animals
-        # print("")
-        # 2. Generate a string with the animals' data
-        output = ''
-        for animal in animals_data:
-            # Use .get() to avoid errors with missing data
-            name = animal.get("name")
-            characteristics = animal.get("characteristics", {})
-            diet = characteristics.get("diet")
-            animal_type = characteristics.get("type")
-            locations = animal.get("locations", [])
-            if locations:
-                first_location = locations[0]
-            else:
-                first_location = None
-            # Build the string for this specific animal
-            if name:
-                output += f"Name: {name}\n"
-            if diet:
-                output += f"Diet: {diet}\n"
-            if locations:
-                output += f"Location: {locations[0]}\n"
-            if animal_type:
-                output += f"Type: {animal_type}\n"
+        output += '<li class="cards__item">\n'
+        if name:
+            output += f"  <div class='card__title'>{name}</div><br/>\n"
+        if diet:
+            output += f"  <strong>Diet:</strong> {diet}<br/>\n"
+        if locations:
+            output += f"  <strong>Location:</strong> {locations[0]}<br/>\n"
+        if animal_type:
+            output += f"  <strong>Type:</strong> {animal_type}<br/>\n"
+        output += '</li>\n'
 
-            # Add a newline after each animal for spacing
-            output += "\n"
-    # 3. Read the content of the template
-    with open("animals_template.html", "r") as template_file:
+    # 3. Read template with UTF-8
+    with open("animals_template.html", "r", encoding="utf-8") as template_file:
         template_content = template_file.read()
 
-    # 4. Replace the placeholder with the generated string
+    # 4. Replace placeholder
     final_html_content = template_content.replace("__REPLACE_ANIMALS_INFO__", output)
 
-    # 5. Write the new HTML content to a new file
-    with open("animals.html", "w") as output_file:
+    # 5. Write final file with UTF-8
+    with open("animals.html", "w", encoding="utf-8") as output_file:
         output_file.write(final_html_content)
 
-    print("Success: 'animals.html' has been created.")
+    print("Success: 'Darwin's Fox' should now display correctly!")
+
 
 if __name__ == "__main__":
     main()
+# import json
+#
+#
+# def load_data(file_path):
+#     """ Loads a JSON file """
+#     with open(file_path, "r") as handle:
+#         return json.load(handle)
+#
+#
+# def main():
+#     # 1. Load the animal data
+#     animals_data = load_data('animals_data.json')
+#
+#     # 2. Generate the HTML string with Serialization
+#     output = ''
+#     for animal in animals_data:
+#         # Extract data safely using .get()
+#         name = animal.get("name")
+#         characteristics = animal.get("characteristics", {})
+#         diet = characteristics.get("diet")
+#         animal_type = characteristics.get("type")
+#         locations = animal.get("locations", [])
+#
+#         # Start the list item (The "Card")
+#         output += '<li class="cards__item">\n'
+#
+#         # Add details only if they exist, followed by a <br/> for the next line
+#         if name:
+#             output += f"  <div class='card__title'>{name}</div><br/>\n"
+#         if diet:
+#             output += f"  <strong>Diet:</strong> {diet}<br/>\n"
+#         if locations:
+#             output += f"  <strong>Location:</strong> {locations[0]}<br/>\n"
+#         if animal_type:
+#             output += f"  <strong>Type:</strong> {animal_type}<br/>\n"
+#
+#         # Close the list item
+#         output += '</li>\n'
+#
+#     # 3. Read the template
+#     with open("animals_template.html", "r") as template_file:
+#         template_content = template_file.read()
+#
+#     # 4. Replace the placeholder
+#     final_html_content = template_content.replace("__REPLACE_ANIMALS_INFO__", output)
+#
+#     # 5. Write to the final file
+#     with open("animals.html", "w") as output_file:
+#         output_file.write(final_html_content)
+#
+#     print("Success: 'animals.html' is now styled with HTML cards!")
+#
+#
+# if __name__ == "__main__":
+#     main()
