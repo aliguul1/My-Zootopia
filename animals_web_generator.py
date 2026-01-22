@@ -1,10 +1,10 @@
 import json
-
+# Load data
 def load_data(file_path):
     """ Loads a JSON file """
     with open(file_path, "r") as handle:
         return json.load(handle)
-
+# Main
 def main():
     # Load the animal data
     animals_data = load_data('animals_data.json')
@@ -26,7 +26,7 @@ def main():
         else:
             first_location = None
 
-        # Printing logic: Only print if the field exists
+        # Printing logic: Only print if the field exists. Animal Type field sometimes doesn't exist
         if name:
             print(f"Name: {name}")
         if diet:
